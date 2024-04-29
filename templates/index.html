@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="title">Story Generator</h1>
+    <form id="story-form">
+        <label class="prompt" for="prompt">Enter Prompt:</label><br><br>
+        <input class="input-box" type="text" id="prompt" name="prompt"><br><br>
+        <button id="btn" type="submit">Generate Story</button>
+    </form>
+    <div id="story-output"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#story-form").submit(function(event) {
+                event.preventDefault();
+                var prompt = $("#prompt").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/generate-story",
+                    data: { prompt: prompt },
+                    success: function(response) {
+                        $("#story-output").text(response.error || response.story);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
